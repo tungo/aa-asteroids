@@ -35,11 +35,30 @@ Function.prototype.curry = function (numArgs) {
   return _curry;
 };
 
+
+Function.prototype.curry2 = function (numArgs) {
+  let that = this;
+  const args = [];
+
+  function _curry(arg) {
+    args.push(arg);
+
+    if (args.length === numArgs) {
+      return that.call(null, ...args);
+    } else {
+      return _curry;
+    }
+  }
+
+  return _curry;
+};
+
+
 let sum = function (num1, num2, num3) {
   return num1 + num2 + num3;
 };
 
-let s = sum.curry(3);
+let s = sum.curry2(3);
 console.log(s);
 
 let s1 = s(1);

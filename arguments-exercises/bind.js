@@ -7,6 +7,16 @@ Function.prototype.myBind = function (object) {
   };
 };
 
+
+Function.prototype.myBind2 = function (...callArguments) {
+  let that = this;
+  const bindArguments = callArguments.slice(1);
+  return function (...newArguments) {
+    that.apply(callArguments[0], bindArguments.concat(newArguments));
+  };
+};
+
+
 class Cat {
   constructor(name) {
     this.name = name;
@@ -26,22 +36,22 @@ markov.says("meow", "Ned");
 // true
 
 // bind time args are "meow" and "Kush", no call time args
-markov.says.myBind(breakfast, "meow", "Kush")();
+markov.says.myBind2(breakfast, "meow", "Kush")();
 // Breakfast says meow to Kush!
 // true
 
 // no bind time args (other than context), call time args are "meow" and "me"
-markov.says.myBind(breakfast)("meow", "a tree");
+markov.says.myBind2(breakfast)("meow", "a tree");
 // Breakfast says meow to a tree!
 // true
 
 // bind time arg is "meow", call time arg is "Markov"
-markov.says.myBind(breakfast, "meow")("Markov");
+markov.says.myBind2(breakfast, "meow")("Markov");
 // Breakfast says meow to Markov!
 // true
 
 // no bind time args (other than context), call time args are "meow" and "me"
-const notMarkovSays = markov.says.myBind(breakfast);
+const notMarkovSays = markov.says.myBind2(breakfast);
 notMarkovSays("meow", "me");
 // Breakfast says meow to me!
 // true
